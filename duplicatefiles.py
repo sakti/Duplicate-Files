@@ -1,8 +1,9 @@
+#!/usr/bin/env python
 """Find duplicate files inside a directory tree."""
 
 from os import walk, remove, stat
 from os.path import join as joinpath
-from md5 import md5
+from hashlib import md5
 
 def find_duplicates( rootdir ):
     """Find duplicate files in directory tree."""
@@ -14,7 +15,7 @@ def find_duplicates( rootdir ):
             filesize = stat( filepath ).st_size
             filesizes.setdefault( filesize, [] ).append( filepath )
     unique = set()
-    duplicates = [] 
+    duplicates = []
     # We are only interested in lists with more than one entry.
     for files in [ flist for flist in filesizes.values() if len(flist)>1 ]:
         for filepath in files:
@@ -28,10 +29,10 @@ def find_duplicates( rootdir ):
 
 if __name__ == '__main__':
     from argparse import ArgumentParser
-    
+
     PARSER = ArgumentParser( description='Finds duplicate files.' )
     PARSER.add_argument( 'root', metavar='R', help='Dir to search.' )
-    PARSER.add_argument( '-remove', action='store_true', 
+    PARSER.add_argument( '-remove', action='store_true',
                          help='Delete duplicate files.' )
     ARGS = PARSER.parse_args()
 
